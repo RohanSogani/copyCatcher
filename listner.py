@@ -10,6 +10,10 @@ def isUrl(url):
 
 def printOut(clipboard_content):
     print("Found a url", str(clipboard_content))
+    print("Opening File")
+    file = open("listner.txt", "a+")
+    file.write(str(clipboard_content) + "\n")
+    file.close()
 
 class copyUrlListner(threading.Thread):
     def __init__(self, predicate, callback, pause=5.):
@@ -37,7 +41,7 @@ def main():
     listner.start()
     while True:
         try:
-            print("Patience, Waiting to be changed clipboard...")
+            print("Waiting to be changed...")
             time.sleep(10)
         except KeyboardInterrupt:
             listner.stop()
