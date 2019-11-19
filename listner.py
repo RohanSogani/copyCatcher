@@ -1,7 +1,8 @@
 import time
 import threading
-
+import sys
 import pyperclip
+from datetime import datetime
 
 def isUrl(url):
     if url.startswith("http://") or url.startswith("https://"):
@@ -11,13 +12,14 @@ def isUrl(url):
 def printOut(clipboard_content):
     print("Found a url", str(clipboard_content))
     print("Opening File")
-    file = open("listner.txt", "a+")
-    file.write(str(clipboard_content) + "\n")
+    file = open("catcher.txt", "a+")
+    todayDateAndTime = datetime.now();
+    file.write(str(clipboard_content) + " |%$$%| " + str(todayDateAndTime) + "\n")
     file.close()
 
-class copyUrlListner(threading.Thread):
+class copyURLCatcher(threading.Thread):
     def __init__(self, predicate, callback, pause=5.):
-        super(copyUrlListner, self).__init__()
+        super(copyURLCatcher, self).__init__()
         self._predicate = predicate
         self._callback = callback
         self._pause = pause
@@ -37,14 +39,14 @@ class copyUrlListner(threading.Thread):
         self._stopping = True
 
 def main():
-    listner = copyUrlListner(isUrl, printOut, 5.)
-    listner.start()
+    catcher = copyURLCatcher(isUrl, printOut, 5.)
+    catcher.start()
     while True:
         try:
-            print("Waiting to be changed...")
+            print("Waiting for clipboard to be changed...")
             time.sleep(10)
         except KeyboardInterrupt:
-            listner.stop()
+            catcher.stop()
             break
 
 
