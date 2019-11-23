@@ -14,7 +14,7 @@ def printOut(clipboard_content):
     print("Opening File")
     file = open("catcher.txt", "a+")
     todayDateAndTime = datetime.now();
-    file.write(str(clipboard_content) + " |%$$%| " + str(todayDateAndTime) + "\n")
+    file.write(str(clipboard_content) + '\t' + str(todayDateAndTime) + "\n")
     file.close()
 
 class copyURLCatcher(threading.Thread):
