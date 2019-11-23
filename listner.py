@@ -4,31 +4,40 @@ import sys
 import pyperclip
 from datetime import datetime
 
+#Check if URL
 def isUrl(url):
     if url.startswith("http://") or url.startswith("https://"):
         return True
     return False
 
+#Method to print URL and Insert in File
 def printOut(clipboard_content):
     print("Found a url", str(clipboard_content))
     print("Opening File")
     file = open("catcher.txt", "a+")
+    #Get current date and time, could be used for further analysis
     todayDateAndTime = datetime.now();
+    #Separate by tab and end with newline
     file.write(str(clipboard_content) + '\t' + str(todayDateAndTime) + "\n")
     file.close()
 
+#Class for URL Catcher
 class copyURLCatcher(threading.Thread):
     def __init__(self, predicate, callback, pause=5.):
         super(copyURLCatcher, self).__init__()
         self._predicate = predicate
         self._callback = callback
         self._pause = pause
+        #Initial value False for inifite loop
         self._stopping = False
 
     def run(self):
         currentCopyVal = ""
+        #infinte to keep on checking
         while not self._stopping:
+            #Use pyperclip.paste() to get the content of the clipboard
             temporaryCopyVal = pyperclip.paste()
+            #Sense a change in value
             if temporaryCopyVal != currentCopyVal:
                 currentCopyVal = temporaryCopyVal
                 if self._predicate(currentCopyVal):
@@ -45,8 +54,11 @@ def main():
         try:
             print("Waiting for clipboard to be changed...")
             time.sleep(10)
+        #End when ctrl+z is hit
         except KeyboardInterrupt:
+            #Update value to True
             catcher.stop()
+            #Do further analysis here???
             break
 
 

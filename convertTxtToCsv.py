@@ -9,9 +9,10 @@ if(sys.argv[1].endswith('.txt') == False):
     sys.exit()
 print("Processing")
 with open('catcher.txt', 'r') as inFile:
+    #Remove leading and trailing whitespaces
     stripped = (line.strip() for line in inFile)
-    lines = (line.split(",") for line in stripped if line)
-    with open('log.csv', 'w') as out_file:
-        writer = csv.writer(out_file)
+    lines = (line.split("\t") for line in stripped if line)
+    with open('log.csv', 'w') as outFile:
+        writer = csv.writer(outFile)
         writer.writerow(('URL', 'TimeStamp'))
         writer.writerows(lines)
